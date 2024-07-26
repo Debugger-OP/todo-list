@@ -31,41 +31,53 @@
 
 var state = {
   taskList: [],
-};
+}; // creates an object state which have tasklist empty array which should be filled later.
 
-// DOM Operations
+/*DOM OPERATIONS*/
 
+//this is DOM operation which link and copy all the values of "task__contents" and "task__modal__body"
+// in the container taskContents and taskModal respectively.so that we can store retrieved data into tasklist array of state obj.
 var taskContents = document.querySelector(".task__contents");
 var taskModal = document.querySelector(".task__modal__body");
 
-// console.log(taskContents)
-// console.log(taskModal)
-
+//This function takes an object containing task data (like id, title, description, type, and url)
+// and returns a string of HTML representing a task card(inshort this is the template which is to be dynamically).
 const htmlTaskContent = ({ id, title, description, type, url }) => `
-    <div class="col-md-6 col-lg-4 mt-3" id=${id} key=${id}>
-        <div class="card shadow-sm task__card">
+    <div class="col-md-6 col-lg-4 mt-3" id=${id} key=${id}>            <!-- this will create a main div which have id assigned in handleSubmit-->
+        <div class="card shadow-sm task__card">                        <!-- this will create a sub main div -->
             <div class="card-header d-flex justify-content-end task__card__header gap-2">
-                <button type="button" class="btn btn-outline-info mr-2" name=${id} onclick="editTask.apply(this, arguments)">
+                <button type="button" class="btn btn-outline-info mr-2" name=${id} onclick="editTask.apply(this, arguments)"> 
                     <i class="fas fa-pencil-alt" name=${id}></i>
                 </button>
                 <button type="button" class="btn btn-outline-danger mr-2 name=${id}" onclick="deleteTask.apply(this, arguments)">
                     <i class="fas fa-trash-alt" name=${id}></i>
                 </button>
             </div>
-            <div class="card-body">
+            <div class="card-body">             <!-- this is the body of the template card-->
+
+            <!-- this will take url to create an image on the card as the user passed the image url by ternary operator, "url" if its true (url is present) then 1st condtion otheriwse 2nd which have default image url -->
+
                 ${
                   url
                     ? `<img width="100%" src=${url} alt="card image top" class="card-image-top md-3 rounded-lg" />`
                     : `<img width="100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScujirQqIFjN5GuM1565_-DIX6OyU_96HzNBl_BAX8GL0JzMs8&s" alt="card image top" class="card-image-top md-3 rounded-lg" />`
-                }
-                <h4 class="card-title">${title}</h4>
+                } 
+
+                
+                <h4 class="card-title">${title}</h4>        <!-- this is card title heading of 4size-->
                 <p class="description trim-3-lines text-muted card-text">${description}</p>
                 <div class="tags text-white d-flex flex-wrap">
                     <span class="badge bg-primary m-1">${type}</span>
                 </div>
             </div>
-            <div class="card-footer">
-                <button type="button" class="btn btn-outline-primary float-right"  data-bs-toggle="modal" data-bs-target="#showTask" id=${id} onclick='openTask.apply(this, arguments)'>
+            <div class="card-footer"> 
+
+            <!-- in this button we have data-bs-toggle="modal" which tells when this button is clicked open the modal 
+                 and  data-bs-target="#showTask" tells open the modal which have id = #showTask(same as css id selector)
+                 and these are bootstrap elements-->
+
+                <button type="button" class="btn btn-outline-primary float-right"  data-bs-toggle="modal" 
+                data-bs-target="#showTask" id=${id} onclick='openTask.apply(this, arguments)'>
                 Open Task</button>
             </div>
         </div>
@@ -73,7 +85,11 @@ const htmlTaskContent = ({ id, title, description, type, url }) => `
 `;
 
 const htmlModalContent = ({ id, title, description, url }) => {
+  //this add the id data to container date as an obj,which is retrieved from the handleSubmit in the from of milliseconds and
+  //firstly converted to int for type safety using parse.int() function.
+  // and Using new Date(parseInt(id)) is essential because it converts a timestamp (milliseconds since epoch) into a Date object for easy date formatting and manipulation. Without this conversion, you only have a raw integer, not a human-readable date.
   const date = new Date(parseInt(id));
+
   return `
     <div id=${id}>
         ${
@@ -81,19 +97,22 @@ const htmlModalContent = ({ id, title, description, url }) => {
             ? `<img width="100%" src=${url} alt="card image cap" class="image-fluid mb-3" />`
             : `<img width="100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScujirQqIFjN5GuM1565_-DIX6OyU_96HzNBl_BAX8GL0JzMs8&s" alt="card image cap" class="image-fluid mb-3" />`
         }
+
+        <!-- This converts the Date object to a string in a readable format, like "Wed Jul 24 2024" -->
         <strong class="text-sm text-muted">Created On ${date.toDateString()}</strong>
+
         <h2 class="my-3">${title}</h2>
         <p class="lead">${description}</p>
     </div>
     `;
 };
 
+//this function will update the local storage of web browser after converting tasklist array or state object(key:"values") into string coz web storage can only store data in the from of strings ("key":"values")
 const updateLocalStorage = () => {
   localStorage.setItem(
-    "task",
-    JSON.stringify({
-      tasks: state.taskList,
-    })
+    "task", //key of local storage
+    JSON.stringify({ tasks: state.taskList }) // here "tasks" is key of object which are converted into string and counted as
+    //values of key "task".
   );
 };
 
@@ -252,9 +271,14 @@ const searchTask = (e) => {
     taskContents.removeChild(taskContents.firstChild);
   }
 
-  const resultData = state.taskList.filter(({ title }) => title.includes(e.target.value));
+  const resultData = state.taskList.filter(({ title }) =>
+    title.includes(e.target.value)
+  );
 
-  resultData.map((cardData) => { 
-    return taskContents.insertAdjacentHTML("beforeend",htmlTaskContent(cardData))
-  })
+  resultData.map((cardData) => {
+    return taskContents.insertAdjacentHTML(
+      "beforeend",
+      htmlTaskContent(cardData)
+    );
+  });
 };
