@@ -44,7 +44,7 @@ var taskModal = document.querySelector(".task__modal__body");
 // and returns a string of HTML representing a task card(inshort this is the template which is to be dynamically).
 const htmlTaskContent = ({ id, title, description, type, url }) => `
     <div class="col-md-6 col-lg-4 mt-3" id=${id} key=${id}>            <!-- this will create a main div which have id assigned in handleSubmit-->
-        <div class="card shadow-sm task__card">                      
+        <div class="card shadow-sm task__card">                        <!-- this will create a sub main div -->
             <div class="card-header d-flex justify-content-end task__card__header gap-2">
                 <button type="button" class="btn btn-outline-info mr-2" name=${id} onclick="editTask.apply(this, arguments)"> 
                     <i class="fas fa-pencil-alt" name=${id}></i>
@@ -53,19 +53,29 @@ const htmlTaskContent = ({ id, title, description, type, url }) => `
                     <i class="fas fa-trash-alt" name=${id}></i>
                 </button>
             </div>
-            <div class="card-body">        
+            <div class="card-body">             <!-- this is the body of the template card-->
+
+            <!-- this will take url to create an image on the card as the user passed the image url by ternary operator, "url" if its true (url is present) then 1st condtion otheriwse 2nd which have default image url -->
+
                 ${
                   url
                     ? `<img width="100%" src=${url} alt="card image top" class="card-image-top md-3 rounded-lg" />`
                     : `<img width="100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScujirQqIFjN5GuM1565_-DIX6OyU_96HzNBl_BAX8GL0JzMs8&s" alt="card image top" class="card-image-top md-3 rounded-lg" />`
                 } 
-                <h4 class="card-title">${title}</h4>    
+
+                
+                <h4 class="card-title">${title}</h4>        <!-- this is card title heading of 4size-->
                 <p class="description trim-3-lines text-muted card-text">${description}</p>
                 <div class="tags text-white d-flex flex-wrap">
                     <span class="badge bg-primary m-1">${type}</span>
                 </div>
             </div>
             <div class="card-footer"> 
+
+            <!-- in this button we have data-bs-toggle="modal" which tells when this button is clicked open the modal 
+                 and  data-bs-target="#showTask" tells open the modal which have id = #showTask(same as css id selector)
+                 and these are bootstrap elements-->
+
                 <button type="button" class="btn btn-outline-primary float-right"  data-bs-toggle="modal" 
                 data-bs-target="#showTask" id=${id} onclick='openTask.apply(this, arguments)'>
                 Open Task</button>
@@ -186,125 +196,4 @@ const deleteTask = (e) => {
   return e.targetId.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
     e.targetId.parentNode.parentNode.parentNode.parentNode
   );
-};
-
-//this function will enable the edit task option by when user click on pencil or edit button
-const editTask = (e) => {
-  console.log("loaded");
-  if (!e) e = window.event;
-
-  const targetId = e.target.id; //it will fetch the id of clicked button's card.
-  const type = e.target.tagName; //store the type either button or icon
-
-  //these var are created to store the specific part(editable) of code, to make navigating easy and editing.
-  let parentNode;
-  let taskTitle;
-  let taskDescription;
-  let taskType;
-  let submitButton;
-
-  if (type === "BUTTON") {
-    //if button is clicked then pass button's 2nd parentNode data in parentNode variable.
-    parentNode = e.target.parentNode.parentNode;
-  } else {
-    //if button is clicked then pass icon's 3nd parentNode data in parentNode variable.
-    parentNode = e.target.parentNode.parentNode.parentNode;
-  }
-
-  //we have parentNode element in which we navigate to its childNode present at 3rd index of parentNode and again navigate to 3rd child of parentChildNode at 3rd index of it and storing the end navigating element in taskTitle.
-  taskTitle = parentNode.childNodes[3].childNodes[3];
-
-  //we have parentNode element in which we navigate to its childNode present at 3rd index of parentNode and again navigate to 5th child of parentChildNode at 5th index of it and storing the end navigating element in taskdesc.
-  taskDescription = parentNode.childNodes[3].childNodes[5];
-
-  //we have parentNode element in which we navigate to its childNode present at 3rd index of parentNode and again navigate to 7th child of parentChildNode at 7th index and again navigate to 1st child of 7th one and storing the end navigating element in taskType.
-  taskType = parentNode.childNodes[3].childNodes[7].childNodes[1];
-
-  //we have parentNode element in which we navigate to its childNode present at 5th index of parentNode and again navigate to 1st child of parentChildNode and storing the end navigating element in submitButton.
-  submitButton = parentNode.childNodes[5].childNodes[1];
-
-  //here we are making the stored elements in the variables direclty editable in browser using setAttribute(), where "contenteditable" is attribute to make it editable and "true" to allow user to edit it.
-  taskTitle.setAttribute("contenteditable", "true");
-  taskType.setAttribute("contenteditable", "true");
-  taskDescription.setAttribute("contenteditable", "true");
-  submitButton.setAttribute("onClick", "saveEdit.apply(this,arguments)"); //doubt
-
-  //here we are disabling the trigger and toggle bootstrap attributes of submit button which will change to save
-  //changes button when edit button or icon is clicked, so that when save changes button modal will not be triggered.
-  submitButton.removeAttribute("data-bs-toggle");
-  submitButton.removeAttribute("data-bs-target");
-  submitButton.innerHTML = "Save Changes"; // changes the submit button text to save changes text using innerHTML method
-};
-
-//this function will save the changes user made to the webpage,tasklist and local storage, so that when refreshed then new content will not reversed. used in submitButton.setAttribute()
-const saveEdit = (e) => {
-  if (!e) e = window.event;
-
-  const targetId = e.target.id;
-  const parentNode = e.target.parentNode.parentNode;
-
-  //these commands will navigate to childNode locations.
-  const taskTitle = parentNode.childNodes[3].childNodes[3];
-
-  const taskDescription = parentNode.childNodes[3].childNodes[5];
-
-  const taskType = parentNode.childNodes[3].childNodes[7].childNodes[1];
-
-  const submitButton = parentNode.childNodes[5].childNodes[1];
-
-  //on visiting targeted location,this object update will hold the updated values or updated content using innerHTML method
-  // innerHTML method can function diffrently depending on usage, it can read and write the html content.
-  const update = {
-    taskTitle: taskTitle.innerHTML,
-    taskDescription: taskDescription.innerHTML,
-    taskType: taskType.innerHTML,
-  };
-
-  //it will create a refrence of state.tasklist
-  let stateCopy = state.taskList;
-
-  //this will update the the stateCopy reference with new data which holded by update method.
-  stateCopy = stateCopy.map(
-    (task) =>
-      task.id //if task.id is true then it will update the fields in stateCopy array
-        ? {
-            id: task.id,
-            title: update.taskTitle,
-            description: update.taskDescription,
-            type: update.taskType,
-          }
-        : task //if not then no change.
-  );
-
-  state.taskList = stateCopy; // this will replace the old array tasklist with new array of statecopy
-  updateLocalStorage(); // this will update the local storage
-
-  taskTitle.setAttribute("contenteditable", "false"); // this will set this att. to false so that user cant edit once save changes button clicks
-  taskType.setAttribute("contenteditable", "false"); // this will set this att. to false so that user cant edit once save changes button clicks
-  taskDescription.setAttribute("contenteditable", "false"); // this will set this att. to false so that user cant edit once save changes button clk
-
-  submitButton.setAttribute("onClick", "openTask.apply(this,arguments)"); //this change the save changes att. to again opentask att.
-
-  submitButton.setAttribute("data-bs-toggle", "modal"); //this readd the triggers to trigger the modal
-  submitButton.setAttribute("data-bs-target", "#showTask"); //this readd the triggers to trigger the modal
-  submitButton.innerHTML = "Open Task"; // this will rechange the button text from save changes to again open Task.
-};
-
-const searchTask = (e) => {
-  if (!e) e = window.event;
-
-  while (taskContents.firstChild) {
-    taskContents.removeChild(taskContents.firstChild);
-  }
-
-  const resultData = state.taskList.filter(({ title }) =>
-    title.includes(e.target.value)
-  );
-
-  resultData.map((cardData) => {
-    return taskContents.insertAdjacentHTML(
-      "beforeend",
-      htmlTaskContent(cardData)
-    );
-  });
 };
