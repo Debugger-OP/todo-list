@@ -1,0 +1,194 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Mobile Button */
+.add__new__btn__mobile__only {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  /* padding: 15px 20px; */
+  background: #3490dc;
+  color: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.add__new__btn__mobile__only button {
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #3490dc;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add__new__btn__mobile__only button:hover {
+  background: #2779bd;
+  
+}
+
+@media (min-width: 768px){
+    .add__new__btn__mobile__only{
+        display: none;
+        border: none;
+        background-color: none;
+
+    }
+}
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(to right, #1c92d2, #f2fcfe);
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1c3d5a;
+  text-transform: uppercase;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cmVjdCB4PSI0IiB5PSI2IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHJ4PSIxIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==');
+}
+
+/* Search Input */
+.input-group {
+  margin: 20px 0;
+}
+
+.input-group .form-control {
+  border-radius: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-group .input-group-text {
+  background-color: #3490dc;
+  color: white;
+  border: none;
+  border-radius: 30px;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+.card img {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  width: 100%;
+  height: auto;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1.75rem;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+.tags .badge {
+  margin: 5px;
+  background-color: #3490dc;
+  color: white;
+}
+
+/* Modals */
+.modal-content {
+  border-radius: 15px;
+  border: none;
+}
+
+.modal-header {
+  background: #3490dc;
+  color: white;
+  border-bottom: none;
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* Form Elements */
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: #3490dc;
+  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
+}
+
+.btn-primary {
+  background-color: #3490dc;
+  border-color: #3490dc;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #2779bd;
+}
+
+/* Custom Button */
+.btn-custom {
+  background-color: #e3342f;
+  border-color: #e3342f;
+  border-radius: 30px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: #cc1f1a;
+}
